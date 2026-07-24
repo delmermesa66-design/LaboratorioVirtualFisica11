@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laboratorio Virtual del Péndulo Simple 2.0</title>
+  <meta name="theme-color" content="#071426">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div>
+    <h1>Laboratorio Virtual del Péndulo Simple 2.0</h1>
+    <p>Explora el período, la energía y el movimiento angular.</p>
+  </div>
+  <div class="actions">
+    <button id="startBtn">Iniciar</button>
+    <button id="resetBtn">Reiniciar</button>
+    <button id="csvBtn">Exportar CSV</button>
+    <button id="pngBtn">Captura PNG</button>
+    <button id="pdfBtn">Informe PDF</button>
+  </div>
+</header>
+
+<main class="layout">
+  <aside class="panel">
+    <h2>Controles</h2>
+
+    <label>Longitud L: <span id="lOut">1.00 m</span></label>
+    <input id="lSlider" type="range" min="0.20" max="2.00" step="0.01" value="1.00">
+
+    <label>Masa m: <span id="mOut">0.30 kg</span></label>
+    <input id="mSlider" type="range" min="0.05" max="2.00" step="0.01" value="0.30">
+
+    <label>Ángulo inicial θ₀: <span id="aOut">20°</span></label>
+    <input id="aSlider" type="range" min="1" max="70" step="1" value="20">
+
+    <label>Gravedad:</label>
+    <select id="gSelect">
+      <option value="9.81">Tierra — 9.81 m/s²</option>
+      <option value="1.62">Luna — 1.62 m/s²</option>
+      <option value="3.71">Marte — 3.71 m/s²</option>
+      <option value="24.79">Júpiter — 24.79 m/s²</option>
+    </select>
+
+    <label class="check"><input id="dampingToggle" type="checkbox"> Amortiguamiento</label>
+    <label>β: <span id="bOut">0.15 s⁻¹</span></label>
+    <input id="bSlider" type="range" min="0" max="1.5" step="0.01" value="0.15">
+
+    <label class="check"><input id="vectorToggle" type="checkbox" checked> Mostrar vectores</label>
+    <label class="check"><input id="photogateToggle" type="checkbox" checked> Fotopuerta virtual</label>
+
+    <h2>Magnitudes</h2>
+    <div class="cards">
+      <div><span>Tiempo</span><strong id="timeOut">0.00 s</strong></div>
+      <div><span>Ángulo</span><strong id="thetaOut">20.00°</strong></div>
+      <div><span>ω</span><strong id="omegaOut">0.000 rad/s</strong></div>
+      <div><span>T teórico</span><strong id="tTheoryOut">2.006 s</strong></div>
+      <div><span>T medido</span><strong id="tMeasuredOut">—</strong></div>
+      <div><span>Ciclos</span><strong id="cyclesOut">0</strong></div>
+      <div><span>T promedio</span><strong id="avgOut">—</strong></div>
+      <div><span>Error</span><strong id="errorOut">—</strong></div>
+    </div>
+
+    <h2>Energías</h2>
+    <div class="energy-list">
+      <p>Ec: <strong id="keOut">0.0000 J</strong></p>
+      <p>Ep: <strong id="peOut">0.0000 J</strong></p>
+      <p>Em: <strong id="meOut">0.0000 J</strong></p>
+    </div>
+  
+    <h2>Guardar práctica</h2>
+    <div class="save-grid">
+      <button id="saveBtn">Guardar JSON</button>
+      <button id="loadBtn">Cargar JSON</button>
+    </div>
+    <input id="loadInput" type="file" accept=".json,application/json" hidden>
+  </aside>
+
+  <section class="workspace">
+    <section class="card">
+      <div class="sim-head"><h2>Simulación</h2><strong id="timerOut">00:00.000</strong></div>
+      <canvas id="simCanvas"></canvas>
+    </section>
+
+    <section class="chart-grid">
+      <article class="card">
+        <h2>θ(t)</h2>
+        <canvas id="thetaCanvas"></canvas>
+      </article>
+      <article class="card">
+        <h2>ω(t)</h2>
+        <canvas id="omegaCanvas"></canvas>
+      </article>
+    </section>
+
+    <section class="card">
+      <h2>Registro experimental</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>t (s)</th>
+              <th>θ (°)</th>
+              <th>ω (rad/s)</th>
+              <th>Ec (J)</th>
+              <th>Ep (J)</th>
+              <th>Em (J)</th>
+            </tr>
+          </thead>
+          <tbody id="dataBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </section>
+
+  <section class="quiz card">
+    <h2>Comprobación conceptual</h2>
+    <div class="quiz-grid">
+      <article data-answer="b"><p>Al aumentar la longitud, el período:</p><label><input type="radio" name="q1" value="a"> disminuye</label><label><input type="radio" name="q1" value="b"> aumenta</label><button class="checkQuiz">Comprobar</button><small></small></article>
+      <article data-answer="c"><p>La masa del péndulo ideal:</p><label><input type="radio" name="q2" value="a"> aumenta T</label><label><input type="radio" name="q2" value="c"> no modifica T</label><button class="checkQuiz">Comprobar</button><small></small></article>
+    </div>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

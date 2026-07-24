@@ -1,0 +1,10 @@
+{
+  "name": "Laboratorio Virtual del Péndulo Simple 2.0",
+  "short_name": "Péndulo 2.0",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#061221",
+  "theme_color": "#071426",
+  "description": "Laboratorio virtual de Física para estudiar el péndulo simple.",
+  "icons": []
+}
