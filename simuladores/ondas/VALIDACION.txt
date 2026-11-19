@@ -1,0 +1,8 @@
+VALIDACIÓN 2.1
+- Splash desaparece automáticamente.
+- Pestañas funcionan.
+- Iniciar, pausar y reiniciar funcionan.
+- Tensión, masa y longitud actualizan cálculos.
+- El armónico cambia cuando n* cruza al entero siguiente.
+- Preguntas predictivas funcionan.
+- Registro, CSV y captura PNG funcionan.

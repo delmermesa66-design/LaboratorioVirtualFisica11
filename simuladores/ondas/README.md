@@ -1,12 +1,17 @@
-# Laboratorio Virtual de Ondas en Cuerdas
+# Ondas en Cuerdas 2.1
 
-Esta carpeta contendrá el simulador completo de ondas estacionarias en cuerdas.
+Versión corregida para evitar que la pantalla de inicio quede bloqueada.
 
-## Contenido
-
+Archivos:
 - index.html
 - styles.css
 - app.js
-- guía del estudiante
-- guía del docente
-- recursos gráficos
+- manifest.webmanifest
+- sw.js
+- assets/icon.svg
+
+Prueba local:
+1. Abra index.html con Chrome.
+2. La pantalla inicial debe desaparecer en menos de un segundo.
+3. Deben aparecer las pestañas Simulación, Conceptos y Actividad.
+4. Pulse Iniciar y pruebe los controles.
