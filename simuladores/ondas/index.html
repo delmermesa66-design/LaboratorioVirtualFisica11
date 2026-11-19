@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#071426">
+  <title>Ondas en Cuerdas 2.1</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="splash" class="splash">
+  <div class="splash-mark">∿</div>
+  <h1>Ondas en Cuerdas 2.1</h1>
+  <p>Laboratorio virtual de Física</p>
+</div>
+
+<header class="topbar">
+  <div class="brand">
+    <img src="assets/icon.svg" alt="" class="brand-icon">
+    <div>
+      <h1>Laboratorio Virtual de Ondas en Cuerdas</h1>
+      <p>Variables, ecuaciones, nodos y vientres en correspondencia directa.</p>
+    </div>
+  </div>
+  <div class="toolbar">
+    <button id="startBtn" class="primary" type="button">Iniciar</button>
+    <button id="resetBtn" type="button">Reiniciar</button>
+    <button id="slowBtn" type="button">Cámara lenta</button>
+    <select id="speedSelect" aria-label="Velocidad de simulación">
+      <option value="0.20">0.20×</option>
+      <option value="0.35">0.35×</option>
+      <option value="0.50">0.50×</option>
+      <option value="1" selected>1×</option>
+    </select>
+  </div>
+</header>
+
+<nav class="tabs">
+  <button class="tab active" data-view="simulationView" type="button">Simulación</button>
+  <button class="tab" data-view="conceptsView" type="button">Conceptos</button>
+  <button class="tab" data-view="practiceView" type="button">Actividad</button>
+</nav>
+
+<main>
+  <section id="simulationView" class="view active">
+    <div class="layout">
+      <aside class="panel">
+        <h2>Variables modificables</h2>
+
+        <div class="fixed-source">
+          <span>Frecuencia fija del generador</span>
+          <strong>50 Hz</strong>
+        </div>
+
+        <label for="tensionSlider">Tensión T <output id="tensionOut">100 N</output></label>
+        <input id="tensionSlider" type="range" min="20" max="500" step="5" value="100">
+
+        <label for="massSlider">Masa de la cuerda m <output id="massOut">0.020 kg</output></label>
+        <input id="massSlider" type="range" min="0.005" max="0.200" step="0.005" value="0.020">
+
+        <label for="lengthSlider">Longitud de la cuerda L <output id="lengthOut">2.00 m</output></label>
+        <input id="lengthSlider" type="range" min="1" max="5" step="0.1" value="2">
+
+        <div class="metrics">
+          <article><span>Densidad lineal μ</span><strong id="muOut">0.010 kg/m</strong></article>
+          <article><span>Velocidad v</span><strong id="velocityOut">100.00 m/s</strong></article>
+          <article><span>Modo calculado n*</span><strong id="modeCalcOut">2.00</strong></article>
+          <article><span>Armónico mostrado</span><strong id="harmonicOut">2</strong></article>
+          <article><span>Nodos</span><strong id="nodesOut">3</strong></article>
+          <article><span>Vientres</span><strong id="antinodesOut">2</strong></article>
+        </div>
+
+        <section class="resonance-box">
+          <h3>Correspondencia teoría–simulación</h3>
+          <div><span>Longitud de onda</span><strong id="wavelengthOut">2.00 m</strong></div>
+          <div><span>Frecuencia natural</span><strong id="naturalFrequencyOut">50.00 Hz</strong></div>
+          <div><span>Diferencia con el generador</span><strong id="errorOut">0.0 %</strong></div>
+          <div class="track"><div id="resonanceFill" class="fill"></div></div>
+        </section>
+
+        <section class="question-box">
+          <h3>Pregunta de predicción</h3>
+          <p id="questionText">Modifica una variable para generar una pregunta.</p>
+          <div id="questionAnswers" class="answer-grid"></div>
+          <div id="questionFeedback" class="feedback hidden"></div>
+        </section>
+      </aside>
+
+      <section class="workspace">
+        <article class="card">
+          <div class="card-head">
+            <div>
+              <h2>Cuerda tensa con polea y masa colgante</h2>
+              <p>El patrón cambia cuando el cálculo produce un nuevo armónico.</p>
+            </div>
+            <span id="modeBadge" class="badge">2.º armónico</span>
+          </div>
+
+          <canvas id="waveCanvas"></canvas>
+
+          <div class="legend">
+            <span><i class="line string"></i>Cuerda</span>
+            <span><i class="dot node"></i>Nodo</span>
+            <span><i class="dot antinode"></i>Vientre</span>
+            <span><i class="line tension"></i>Tensión</span>
+          </div>
+
+          <div class="summary">
+            <article><span>Modo</span><strong id="summaryMode">n=2</strong></article>
+            <article><span>Nodos</span><strong id="summaryNodes">3</strong></article>
+            <article><span>Vientres</span><strong id="summaryAntinodes">2</strong></article>
+            <article><span>Resonancia</span><strong id="summaryResonance">Alta</strong></article>
+          </div>
+        </article>
+      </section>
+    </div>
+  </section>
+
+  <section id="conceptsView" class="view">
+    <div class="content-grid">
+      <article class="card concept-card">
+        <h2>Ecuaciones algebraicas</h2>
+        <div class="equation">μ = m / L</div>
+        <div class="equation">v = √(T / μ)</div>
+        <div class="equation">n* = 2Lf<sub>g</sub> / v</div>
+        <div class="equation">λ<sub>n</sub> = 2L / n</div>
+        <div class="equation">f<sub>n</sub> = nv / 2L</div>
+      </article>
+
+      <article class="card concept-card">
+        <h2>Cálculo actual</h2>
+        <div id="calculationText" class="calculation"></div>
+      </article>
+
+      <article class="card concept-card">
+        <h2>Nodos y vientres</h2>
+        <p><strong>Nodo:</strong> punto que permanece prácticamente inmóvil.</p>
+        <p><strong>Vientre:</strong> región donde la amplitud es máxima.</p>
+        <div class="equation">vientres = n</div>
+        <div class="equation">nodos = n + 1</div>
+      </article>
+    </div>
+  </section>
+
+  <section id="practiceView" class="view">
+    <div class="practice-layout">
+      <article class="card">
+        <h2>Actividad guiada</h2>
+        <ol>
+          <li>Configura T = 100 N, m = 0.020 kg y L = 2.00 m.</li>
+          <li>Comprueba que n* ≈ 2.</li>
+          <li>Aumenta la masa hasta observar otro armónico.</li>
+          <li>Registra el ensayo.</li>
+          <li>Aumenta la tensión y compara.</li>
+        </ol>
+        <button id="captureBtn" type="button">Capturar PNG</button>
+      </article>
+
+      <article class="card">
+        <h2>Registro de ensayos</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Ensayo</th><th>T</th><th>m</th><th>L</th><th>v</th><th>n</th><th>Nodos</th><th>Vientres</th></tr>
+            </thead>
+            <tbody id="practiceBody"></tbody>
+          </table>
+        </div>
+        <div class="practice-actions">
+          <button id="recordBtn" type="button">Registrar</button>
+          <button id="clearPracticeBtn" type="button">Limpiar</button>
+          <button id="csvBtn" type="button">Exportar CSV</button>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer>Laboratorio Virtual de Física · Ondas en Cuerdas 2.1</footer>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "Laboratorio Virtual de Ondas en Cuerdas 2.1",
+  "short_name": "Ondas 2.1",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#06111f",
+  "theme_color": "#071426",
+  "description": "Simulador educativo de ondas estacionarias en una cuerda tensa.",
+  "icons": [
+    {
+      "src": "assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
