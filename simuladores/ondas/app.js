@@ -290,103 +290,54 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
  
-function capture() {
-  const canvas = e.wave;
-  const width = 1200;
-  const height = 700;
-
-  // Conservar las dimensiones y estilos originales.
-  const oldWidth = canvas.width;
-  const oldHeight = canvas.height;
-  const oldStyle = canvas.getAttribute("style");
-
-  try {
-    // Crear dimensiones válidas aunque la pestaña esté oculta.
-    canvas.style.position = "fixed";
-    canvas.style.left = "-10000px";
-    canvas.style.top = "0";
-    canvas.style.display = "block";
-    canvas.style.width = width + "px";
-    canvas.style.height = height + "px";
-
-    canvas.width = width;
-    canvas.height = height;
-
-    // Dibujar la simulación en el lienzo.
-    draw();
-
-    // Exportar el PNG.
-    canvas.toBlob((blob) => {
-      if (blob) {
-        download("ondas_cuerda_simulacion.png", blob);
-      } else {
-        alert("No se pudo generar la captura.");
-      }
-    }, "image/png");
-
-  } finally {
-    // Restaurar el lienzo original.
-    canvas.width = oldWidth;
-    canvas.height = oldHeight;
-
-    if (oldStyle === null) {
-      canvas.removeAttribute("style");
-    } else {
-      canvas.setAttribute("style", oldStyle);
-    }
-
-    draw();
-  }
-}
 
 function capture() {
   const canvas = e.wave;
   const width = 1200;
   const height = 700;
-
-  // Conservar las dimensiones y estilos originales.
-  const oldWidth = canvas.width;
-  const oldHeight = canvas.height;
   const oldStyle = canvas.getAttribute("style");
 
   try {
-    // Crear dimensiones válidas aunque la pestaña esté oculta.
-    canvas.style.position = "fixed";
-    canvas.style.left = "-10000px";
-    canvas.style.top = "0";
-    canvas.style.display = "block";
-    canvas.style.width = width + "px";
-    canvas.style.height = height + "px";
+    // Mostrar temporalmente el lienzo fuera de pantalla.
+    canvas.style.setProperty("display", "block", "important");
+    canvas.style.setProperty("position", "fixed", "important");
+    canvas.style.setProperty("left", "-10000px", "important");
+    canvas.style.setProperty("top", "0", "important");
+    canvas.style.setProperty("width", width + "px", "important");
+    canvas.style.setProperty("height", height + "px", "important");
 
-    canvas.width = width;
-    canvas.height = height;
-
-    // Dibujar la simulación en el lienzo.
+    // Dibujar la simulacion con dimensiones reales.
     draw();
 
-    // Exportar el PNG.
-    canvas.toBlob((blob) => {
-      if (blob) {
-        download("ondas_cuerda_simulacion.png", blob);
-      } else {
-        alert("No se pudo generar la captura.");
-      }
-    }, "image/png");
+    if (canvas.width < 100 || canvas.height < 100) {
+      throw new Error("El lienzo no tiene dimensiones validas.");
+    }
 
+    // Capturar antes de restaurar el lienzo.
+    const png = canvas.toDataURL("image/png");
+
+    // Descargar la imagen.
+    const enlace = document.createElement("a");
+    enlace.href = png;
+    enlace.download = "ondas_cuerda_simulacion.png";
+    document.body.appendChild(enlace);
+    enlace.click();
+    enlace.remove();
+
+  } catch (error) {
+    console.error("Error al capturar PNG:", error);
+    alert("No se pudo generar la imagen PNG.");
   } finally {
-    // Restaurar el lienzo original.
-    canvas.width = oldWidth;
-    canvas.height = oldHeight;
-
+    // Restaurar la apariencia original.
     if (oldStyle === null) {
       canvas.removeAttribute("style");
     } else {
       canvas.setAttribute("style", oldStyle);
     }
-
     draw();
   }
 }
+
 
   document.querySelectorAll(".tab").forEach((tab)=>{
     tab.addEventListener("click",()=>{
