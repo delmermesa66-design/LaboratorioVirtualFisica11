@@ -300,52 +300,58 @@ function fit() {
 
  
 
+
 function capture() {
-  const canvas = e.wave;
-  const width = 1200;
-  const height = 700;
-  const oldStyle = canvas.getAttribute("style");
-
   try {
-    // Mostrar temporalmente el lienzo fuera de pantalla.
-    canvas.style.setProperty("display", "block", "important");
-    canvas.style.setProperty("position", "fixed", "important");
-    canvas.style.setProperty("left", "-10000px", "important");
-    canvas.style.setProperty("top", "0", "important");
-    canvas.style.setProperty("width", width + "px", "important");
-    canvas.style.setProperty("height", height + "px", "important");
+    const original = e.wave;
 
-    // Dibujar la simulacion con dimensiones reales.
-    draw();
+    // Crear un lienzo independiente de exportación.
+    const canvas = document.createElement("canvas");
+    canvas.width = 1200;
+    canvas.height = 700;
 
-    if (canvas.width < 100 || canvas.height < 100) {
-      throw new Error("El lienzo no tiene dimensiones validas.");
+    const context = canvas.getContext("2d");
+
+    if (!context) {
+      throw new Error("No se pudo crear el lienzo.");
     }
 
-    // Capturar antes de restaurar el lienzo.
-    const png = canvas.toDataURL("image/png");
+    // Fondo de la imagen.
+    context.fillStyle = "#07182e";
+    context.fillRect(0, 0, 1200, 700);
 
-    // Descargar la imagen.
-    const enlace = document.createElement("a");
-    enlace.href = png;
-    enlace.download = "ondas_cuerda_simulacion.png";
-    document.body.appendChild(enlace);
-    enlace.click();
-    enlace.remove();
+    // Verificar que la simulación esté visible.
+    if (
+      original.width <= 2 ||
+      original.height <= 2 ||
+      original.getBoundingClientRect().width === 0
+    ) {
+      alert(
+        "Para capturar la onda, seleccione primero " +
+        "la pestaña Simulación y pulse Capturar PNG."
+      );
+      return;
+    }
+
+    // Copiar la imagen de la simulación.
+    context.drawImage(original, 0, 0, 1200, 700);
+
+    // Convertir el lienzo independiente en PNG.
+    canvas.toBlob(function(blob) {
+      if (!blob) {
+        alert("No se pudo generar la imagen PNG.");
+        return;
+      }
+
+      download("ondas_cuerda_simulacion.png", blob);
+    }, "image/png");
 
   } catch (error) {
     console.error("Error al capturar PNG:", error);
     alert("No se pudo generar la imagen PNG.");
-  } finally {
-    // Restaurar la apariencia original.
-    if (oldStyle === null) {
-      canvas.removeAttribute("style");
-    } else {
-      canvas.setAttribute("style", oldStyle);
-    }
-    draw();
   }
 }
+
 
 
   document.querySelectorAll(".tab").forEach((tab)=>{
