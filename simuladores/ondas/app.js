@@ -78,14 +78,23 @@ window.addEventListener("DOMContentLoaded", () => {
     const amp=baseAmplitude*(0.35+0.65*q.resonance)*state.fade;
     return amp*Math.sin(state.shownN*Math.PI*x/q.L)*Math.cos(state.phase);
   }
-  function fit(){
-    const r=e.wave.getBoundingClientRect();
-    const dpr=window.devicePixelRatio||1;
-    e.wave.width=Math.max(2,Math.floor(r.width*dpr));
-    e.wave.height=Math.max(2,Math.floor(r.height*dpr));
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-    return {w:r.width,h:r.height};
-  }
+ 
+function fit() {
+  const r = e.wave.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+
+  // Usar las dimensiones visibles o las definidas para captura.
+  const w = r.width || parseFloat(e.wave.style.width) || 2;
+  const h = r.height || parseFloat(e.wave.style.height) || 2;
+
+  e.wave.width = Math.max(2, Math.floor(w * dpr));
+  e.wave.height = Math.max(2, Math.floor(h * dpr));
+
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  return {w, h};
+}
+
   function ordinal(n){return n===1?"1.er":n===2?"2.º":n===3?"3.er":`${n}.º`;}
 
   function updateText(){
