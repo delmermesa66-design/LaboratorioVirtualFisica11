@@ -289,14 +289,101 @@ function fit() {
     setTimeout(()=>URL.revokeObjectURL(url),500);
   }
 
-  function exportCsv(){
-    if(!state.trials.length){alert("Registra al menos un ensayo.");return;}
-    const rows=[
-      ["ensayo","T_N","masa_kg","L_m","velocidad_m_s","armonico","nodos","vientres"],
-      ...state.trials.map((r,i)=>[i+1,r.T,r.m,r.L,r.v,r.n,r.n+1,r.n])
-    ];
-    download("ondas_cuerda_ensayos.csv",new Blob([rows.map(r=>r.join(",")).join("\n")],{type:"text/csv;charset=utf-8"}));
+  
+function exportCsv() {
+  if (!state.trials.length) {
+    alert("Registra al menos un ensayo.");
+    return;
   }
+
+  if (typeof XLSX === "undefined") {
+    alert("No se pudo cargar la biblioteca de Excel. Comprueba tu conexión.");
+    return;
+  }
+
+  const libro = XLSX.utils.book_new();
+
+  const encabezados = [
+    "Ensayo", "Tensión (N)", "Masa cuerda (kg)",
+    "Longitud (m)", "Velocidad (m/s)",
+    "Armónico", "Nodos", "Vientres"
+  ];
+
+  const datos = state.trials.map((r, i) => [
+    i + 1, r.T, r.m, r.L, r.v,
+    r.n, r.n + 1, r.n
+  ]);
+
+  const hojaDatos = XLSX.utils.aoa_to_sheet([
+    encabezados,
+    ...datos
+  ]);
+
+  hojaDatos["!cols"] = [
+    { wch: 12 }, { wch: 18 }, { wch: 22 },
+    { wch: 18 }, { wch: 22 }, { wch: 14 },
+    { wch: 12 }, { wch: 14 }
+  ];
+
+  XLSX.utils.book_append_sheet(
+    libro, hojaDatos, "Experimentos"
+  );
+
+  const calculos = [[
+    "Ensayo", "Densidad lineal (kg/m)",
+    "Longitud de onda (m)", "Frecuencia (Hz)",
+    "Tensión (N)", "Velocidad (m/s)",
+    "Armónico"
+  ]];
+
+  state.trials.forEach((r, i) => {
+    const fila = i + 2;
+
+    calculos.push([
+      i + 1,
+      { f: `Experimentos!C${fila}/Experimentos!D${fila}` },
+      { f: `2*Experimentos!D${fila}/Experimentos!F${fila}` },
+      { f: `Experimentos!F${fila}*Experimentos!E${fila}/(2*Experimentos!D${fila})` },
+      r.T, r.v, r.n
+    ]);
+  });
+
+  const hojaCalculos = XLSX.utils.aoa_to_sheet(calculos);
+
+  hojaCalculos["!cols"] = [
+    { wch: 12 }, { wch: 27 }, { wch: 27 },
+    { wch: 22 }, { wch: 18 }, { wch: 22 },
+    { wch: 14 }
+  ];
+
+  XLSX.utils.book_append_sheet(
+    libro, hojaCalculos, "Calculos"
+  );
+
+  const graficas = XLSX.utils.aoa_to_sheet([
+    ["Datos para graficas de ondas estacionarias"],
+    [],
+    ["Tensión (N)", "Velocidad (m/s)",
+     "Armónico", "Frecuencia (Hz)"],
+    ...state.trials.map(r => [
+      r.T, r.v, r.n, r.n * r.v / (2 * r.L)
+    ])
+  ]);
+
+  graficas["!cols"] = [
+    { wch: 22 }, { wch: 22 },
+    { wch: 18 }, { wch: 22 }
+  ];
+
+  XLSX.utils.book_append_sheet(
+    libro, graficas, "Graficas"
+  );
+
+  XLSX.writeFile(
+    libro, "Ondas_Cuerdas_Experimentos.xlsx"
+  );
+}
+
 
  
 
