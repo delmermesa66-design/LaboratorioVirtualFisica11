@@ -360,15 +360,30 @@ function exportCsv() {
     libro, hojaCalculos, "Calculos"
   );
 
-  const graficas = XLSX.utils.aoa_to_sheet([
-    ["Datos para graficas de ondas estacionarias"],
-    [],
-    ["Tensión (N)", "Velocidad (m/s)",
-     "Armónico", "Frecuencia (Hz)"],
-    ...state.trials.map(r => [
-      r.T, r.v, r.n, r.n * r.v / (2 * r.L)
-    ])
-  ]);
+  
+const graficas = XLSX.utils.aoa_to_sheet([
+  ["DATOS PARA ANALISIS DE ONDAS ESTACIONARIAS"],
+  [],
+  [
+    "Ensayo",
+    "Tension (N)",
+    "Velocidad (m/s)",
+    "Armonico n",
+    "Frecuencia (Hz)",
+    "Longitud de onda (m)",
+    "Densidad lineal (kg/m)"
+  ],
+  ...state.trials.map((r, i) => [
+    i + 1,
+    r.T,
+    r.v,
+    r.n,
+    r.n * r.v / (2 * r.L),
+    2 * r.L / r.n,
+    r.m / r.L
+  ])
+]);
+
 
   graficas["!cols"] = [
     { wch: 22 }, { wch: 22 },
