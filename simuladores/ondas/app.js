@@ -505,6 +505,7 @@ function capture() {
   e.clearPractice.addEventListener("click",()=>{state.trials=[];renderTrials();});
   e.csv.addEventListener("click",exportCsv);
   e.capture.addEventListener("click",capture);
+  document.getElementById("captureSimBtn")?.addEventListener("click", capture);
   window.addEventListener("resize",draw);
 
   const initial=physical(state.displayed);
